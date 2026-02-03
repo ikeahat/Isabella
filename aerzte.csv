@@ -1,0 +1,4 @@
+Beispiel csv nach dem Muster: 
+Name;Address;Phone;Email;Distance <-- Header darf nicht gelöscht werden
+
+Dr. med. Anna Müller;Musterstraße 1, 12345 Musterstadt;+49 123 4567890;anna.mueller@praxis.de;0,5km
