@@ -41,22 +41,61 @@ Mit freundlichen Grüßen
     msg.set_content(body)
     return msg
 
-# Open a single SMTP_SSL connection
-with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=context) as server:
-    server.login(EMAIL_ADDRESS, APP_PASSWORD)
+# comments may be outdated, shit got reworked and comments got ignored somewhat XD
 
-    # Read the CSV
-    with open("psychiater.csv", newline="", encoding="utf-8") as csvfile:
+def read_csv(): # read psychiater.csv, put data into dictionaries with fieldnames as keys.
+    all_entries = []
+    with open("psychiater.csv", newline="", encoding="ANSI") as csvfile:
         reader = csv.DictReader(csvfile, delimiter=';')  # <-- important if CSV uses semicolons, change as needed or remove (default is comma)
-        print("CSV headers:", reader.fieldnames)  # optional: verify headers
-
         for row in reader:
+            entry = {}
+            for field in reader.fieldnames:
+                entry[field] = row[field].strip()
+            all_entries.append(entry)
+    return all_entries
+
+def get_emails_from_entries(e): # get a list of all email strings from the output of read_csv()
+    l = []
+    for entry in e:
+        if entry["Email"]:
+            l.append(entry["Email"])
+    return l
+
+def execute(emails): # send all EMails.
+    # Open a single SMTP_SSL connection
+    with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=context) as server:
+        server.login(EMAIL_ADDRESS, APP_PASSWORD)
+        for email in emails:
             try:
-                email = row["Email"].strip()  # Use exact column name in the csv (case-sensitive)
                 if email:  # skip empty emails
                     msg = create_message(email)
                     server.send_message(msg)
-                    print(f"✅ Sent to {email}")
+                    print(f"successfully sent to {email}")
                     time.sleep(20)  # polite delay to avoid being marked as spam
             except Exception as e:
-                print(f"❌ Failed for {row.get('Email', 'UNKNOWN')}: {e}")
+                print(f"failed for {email}: {e}")
+
+
+def run_program():  # run ts x3
+    entries = read_csv()
+    mails = get_emails_from_entries(entries)
+
+    for entry in entries:
+        if not entry["Email"]:
+            continue
+        print(f"{entry['Email']} | {entry['Distance']} | {entry['Name']}")
+    
+    print(f"\n\n{len(mails)}/{len(entries)} addresses found ^")
+    x = ""
+    print()
+    while x != "y":
+        x = input("send email to ALL OF THEM? (y/n): ")
+        if x == "n":
+            quit()
+    print("sending...")
+    execute(mails)
+    
+run_program()
+
+
+
