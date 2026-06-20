@@ -1,5 +1,5 @@
 # Isabella
-Sind Sie gesetzlich Versicher und verzweifelt? Hier ein py script, um automatisiert Gmails mit Terminanfrage an eine csv Liste der Fachärzte in Ihrer Nähe zu senden!
+Sind Sie gesetzlich versichert und verzweifelt? Hier ein py script, um automatisiert Gmails mit Terminanfrage an eine csv Liste der Fachärzte in Ihrer Nähe zu senden!
 ------------------------------------------------------------------
 
 Der Script ist an andere Mail provider anpassbar, wenn Sie bei Ihrem aber keinen kostenlosen bride Zugang bekommt, ist die einfachste Option, eine neue google mail Adresse zu erstellen.
